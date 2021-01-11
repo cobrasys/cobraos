@@ -153,7 +153,7 @@ function runVM() {
                     stdout: term
                 }
                 window.Commands[args[0]](Context);
-            } else if(window.Packages[args[0]) {
+            } else if(window.Packages[args[0]]) {
                 const Context = {
                     args: args.slice(1),
                     stdout: term
