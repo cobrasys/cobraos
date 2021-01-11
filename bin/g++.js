@@ -1,4 +1,4 @@
-import { JSCPP } from "/bin/g++/c++.js";
+import { JSCPP } from "./gpp/cpp.js";
 
 export function Run(context) {
     const { stdout, args } = context;
