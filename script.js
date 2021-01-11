@@ -59,6 +59,14 @@ window.virtualDrive = {
                 'readme.txt': new VirtualFile('readme.txt', 'hello')
             }
         },
+        'hello.cpp': new VirtualFile('hello.cpp', `
+#include <iostream>
+using namespace std;
+int main() {
+    cout << "Hello World!" << endl;
+    return 0;
+}
+        `),
     },
 }
 
