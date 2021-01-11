@@ -1,4 +1,4 @@
-import Gpp from 'bin/g++.js';
+import Gpp from './g++.js';
 
 let localPackageList = [
     'java',
