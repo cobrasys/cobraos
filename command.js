@@ -98,7 +98,7 @@ window.Commands = {
                 // handle branches off of root
                 if(window.virtualDrive[''][args[0]]) {
                     if(window.virtualDrive[''][args[0]] instanceof(VirtualFile)) {
-                        stdout.writeln(eval(completestring + `['${args[0]}']`).content);
+                        stdout.writeln(window.virtualDrive[''][args[0]].content);
                     } else {
                         stdout.writeln('cat: ' + args[0] + ': is a directory.');
                         return;
