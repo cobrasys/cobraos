@@ -4,7 +4,7 @@
 
 
 
-window.Run = (context) => {
+const Run = (context) => {
     const { stdout, args } = context;
 
     let code = '';
@@ -56,4 +56,4 @@ window.Run = (context) => {
 	
 }
 
-window.Packages['g++'] = window.Run;
+window.Packages['g++'] = Run;

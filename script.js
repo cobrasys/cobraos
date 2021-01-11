@@ -67,6 +67,11 @@ int main() {
     return 0;
 }
         `),
+        'hello.py': new VirtualFile('hello.py', `
+import sys
+
+print(sys.copyright)
+        `),
     },
 }
 
