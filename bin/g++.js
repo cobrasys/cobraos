@@ -1,7 +1,7 @@
 import { JSCPP } from "/bin/g++/c++.js";
 
-module.exports = function(context) {
+export function Run(context) {
     const { stdout, args } = context;
 
-    
+    stdout.write('compiling...')
 }
