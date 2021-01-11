@@ -12,12 +12,12 @@ var commandHistory = [];
 var cur = 0;
 var command = "";
 
-class VirtualDirectory {
-    constructor(name, content) {
-        this.name = name;
-        this.content = content;
-    }
-}
+var __pkg = document.createElement('script');
+
+__pkg.setAttribute('src','pkg.js');
+
+document.head.appendChild(__pkg);
+
 
 class VirtualFile {
     constructor(name, content) {
