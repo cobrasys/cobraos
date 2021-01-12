@@ -68,9 +68,9 @@ int main() {
 }
         `),
         'hello.py': new VirtualFile('hello.py', `
-import sys
+import uuid
 
-print(sys.copyright)
+print(uuid.uuidv4())
         `),
     },
 }
