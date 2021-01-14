@@ -12,7 +12,8 @@ function getFile(event) {
 }
 
 function uploadFile() {
-    window.currentFilecontent = document.getElementById('content-target').value;
+	window.currentFilename = window.currentFilename ? window.currentFilename : 'newfile';
+    	window.currentFilecontent = document.getElementById('content-target').value;
 	if(window.directory == '') {
         // handle branches off of root
         if(window.virtualDrive[''][window.currentFilename]) {
