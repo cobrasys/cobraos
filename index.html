@@ -20,8 +20,13 @@
                 <input type="file" id="input-file"><br>
                 <button onclick="uploadFile()" id="create-file">Upload To VM</button>
             </div>
+            
+            <div id="content-target"></div>
                
-            <textarea id="content-target"></textarea>
+            <script>
+                var editor = ace.edit("content-target");
+                editor.setTheme("ace/theme/monokai");
+            </script>
         </div>
           
         <div class="main">
