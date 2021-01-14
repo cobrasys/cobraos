@@ -7,12 +7,12 @@ function getFile(event) {
 	  placeFileContent(
       document.getElementById('content-target'),
       input.files[0])
-      window.currentFilename = input.files[0].name;
+      document.getElementById('input-filename').value = input.files[0].name;
   }
 }
 
 function uploadFile() {
-	window.currentFilename = window.currentFilename ? window.currentFilename : 'newfile';
+	window.currentFilename = document.getElementById('input-filename').value || 'newfile';
     	window.currentFilecontent = window.editor.getValue();
 	if(window.directory == '') {
         // handle branches off of root
@@ -63,3 +63,4 @@ function readFileContent(file) {
     reader.readAsText(file)
   })
 }
+

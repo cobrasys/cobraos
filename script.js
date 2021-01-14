@@ -97,7 +97,7 @@ function setTerminalSize() {
     //terminalContainer.style.width = width;
     //terminalContainer.style.height = height;
 
-    term.resize(cols, rows);
+    //term.resize(cols, rows);
 }
 
 createTerminal();

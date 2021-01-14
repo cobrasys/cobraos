@@ -15,18 +15,56 @@
     </head>
     <body>
         <div class="sidenav">
-            <div>
-                <label style="color: #818181;" for="input-file">Specify a file:</label><br>
-                <input type="file" id="input-file"><br>
-                <button onclick="uploadFile()" id="create-file">Upload To VM</button>
+            <div class="tab">
+                <button id="upload-button" class="tablinks" onclick="openTab(event, 'Upload')">Upload</button>
+                <button class="tablinks" onclick="openTab(event, 'Run')">Run Code</button>
+                <button class="tablinks" onclick="openTab(event, 'Settings')">Settings</button>
             </div>
             
-            <div id="content-target"></div>
-               
-            <script>
-                window.editor = ace.edit("content-target");
-                editor.setTheme("ace/theme/monokai");
-            </script>
+            <div id="Upload" class="tabcontent">
+                <div>
+                    <p>Specify a file:</p>
+                    <!-- <label style="color: #818181;" for="input-file">Specify a file:</label> -->
+                    <input type="file" id="input-file"><br>
+                    <button onclick="uploadFile();" id="create-file">Upload To VM</button>
+                    <input placeholder="Filename..." type="text" id="input-filename" value="newfile">
+                </div>
+                
+                <div id="content-target"></div>
+                   
+                <script>
+                    openTab({
+                        currentTarget: document.getElementById('upload-button')
+                    }, 'Upload')
+                    window.editor = ace.edit("content-target");
+                    editor.setTheme("ace/theme/monokai");
+
+                    function openTab(evt, cityName) {
+                        var i, tabcontent, tablinks;
+                    
+                        tabcontent = document.getElementsByClassName("tabcontent");
+                        for (i = 0; i < tabcontent.length; i++) {
+                            tabcontent[i].style.display = "none";
+                        }
+                    
+                        tablinks = document.getElementsByClassName("tablinks");
+                        for (i = 0; i < tablinks.length; i++) {
+                            tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+                    
+                        document.getElementById(cityName).style.display = "block";
+                        evt.currentTarget.className += " active";
+                    }
+                </script>
+            </div>
+            
+            <div id="Run" class="tabcontent">
+                <p>Run Code</p>
+            </div>
+            
+            <div id="Settings" class="tabcontent">
+                <p>Settings</p>
+            </div>
         </div>
           
         <div class="main">
