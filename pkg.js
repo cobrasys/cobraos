@@ -18,3 +18,18 @@ let localPackageList = [
 ];
 
 window.Packages = {};
+
+window.Packages.wget = function(context) {
+	const { stdout, args } = context;
+    if(args.length == 1) {
+        window.showPrompt = false;
+        fetch(args[0]).then(response => response.text())
+      .then(data => { 
+            term.write(data); 
+            window.showPrompt = true
+            term.write('\r\n')
+            term.prompt()
+        });
+    }
+	
+}
