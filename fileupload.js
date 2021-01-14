@@ -13,7 +13,7 @@ function getFile(event) {
 
 function uploadFile() {
 	window.currentFilename = window.currentFilename ? window.currentFilename : 'newfile';
-    	window.currentFilecontent = document.getElementById('content-target').value;
+    	window.currentFilecontent = window.editor.getValue();
 	if(window.directory == '') {
         // handle branches off of root
         if(window.virtualDrive[''][window.currentFilename]) {
