@@ -51,7 +51,7 @@ function uploadFile() {
 
 function placeFileContent(target, file) {
 	readFileContent(file).then(content => {
-  	target.value = content
+  	window.editor.setValue(content)
   }).catch(error => console.log(error))
 }
 
