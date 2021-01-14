@@ -76,22 +76,31 @@ const pyRun = (context) => {
         window.showPrompt = false;
         var echocmd = '';
         var startPrompt = false;
+        term.write('>>> ');
         term.on('key', window.PYREPL = function (key, ev) {
             var printable = (
                 !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
             );
-            if (ev.keyCode == 37 || ev.keyCode == 39) {
+
+            // ANSI CODES
+            /*
+            Up: \u001b[{n}A
+            Down: \u001b[{n}B
+            Right: \u001b[{n}C
+            Left: \u001b[{n}D
+            */
+            if (key == '[C') {
+                return;
+            }
+            if(key == '[D') {
                 return;
             }
             if (ev.keyCode == 13) {
                 echocmd = echocmd.trim();
-                term.write('\r\n');
-                if(!startPrompt) term.write('>>> ');
-                startPrompt = true;
                 if (echocmd == '') {
                     return;
                 }
-
+                term.write('\r\n');
                 if (echocmd == 'exit' || echocmd == 'quit()') {
                     window.showPrompt = true;
                     echocmd = '';
@@ -133,6 +142,8 @@ const pyRun = (context) => {
                         }
                     }
                 }
+
+
         
                 try {
                     if (!lines || /^\s*$/.test(lines)) {
@@ -156,9 +167,9 @@ const pyRun = (context) => {
                 echocmd = '';
                 term.write('>>> ')
                 return;
-            } else if (ev.keyCode == 38) {
+            } else if (key == '[A') {
                 return;
-            } else if (ev.keyCode == 40) {
+            } else if (key == '[B') {
                 return;
             } else if (ev.keyCode == 8) {
                 if (echocmd.length > 0) {

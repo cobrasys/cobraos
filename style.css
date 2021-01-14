@@ -22,6 +22,46 @@ body {
     line-height: 20px;
 }
 
-#vm-controls {
-    z-index: 9999;
+.sidenav {
+    height: 100%;
+    width: 40%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+  
+.sidenav p {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+}
+  
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+  
+.main {
+    margin-right: 160px;
+    font-size: 28px;
+    padding: 0px 10px 0px 0px;
+}
+  
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav p {font-size: 18px;}
+}
+
+label {
+    cursor: pointer;
+}
+
+#content-target {
+    width: 90%;
+    height: 220px;
 }

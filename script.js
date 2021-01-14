@@ -84,8 +84,8 @@ var terminalContainer = document.getElementById('terminal-container');
 function setTerminalSize() {
     var cols = parseInt(window.innerWidth / charWidth);
     var rows = parseInt(window.innerHeight / charHeight);
-    var width = window.innerWidth.toString() + 'px';
-    var height = window.innerHeight.toString() + 'px';
+    //var width = window.innerWidth.toString() + 'px';
+    //var height = window.innerHeight.toString() + 'px';
     if (cols < 86) {
         
         asciTitleEnabled = false;
@@ -94,8 +94,8 @@ function setTerminalSize() {
         asciTitleEnabled = true;
     }
 
-    terminalContainer.style.width = width;
-    terminalContainer.style.height = height;
+    //terminalContainer.style.width = width;
+    //terminalContainer.style.height = height;
 
     term.resize(cols, rows);
 }
@@ -143,7 +143,14 @@ function runVM() {
             !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
         );
         if (loadingBar) return;
-        if (ev.keyCode == 37 || ev.keyCode == 39) {
+        
+        if (key == '[C') {
+            return;
+        }
+        if(key == '[D') {
+            return;
+        }
+        if (ev.keyCode == 39) {
             return;
         }
         if (ev.keyCode == 13) {
@@ -188,7 +195,7 @@ function runVM() {
                 command = "";
             }
 
-        } else if (ev.keyCode == 38) {
+        } else if (key == '[A') {
             if (commandHistory.length > 0) {
                 cur = Math.max(0, cur - 1);
                 var i = 0;
@@ -199,7 +206,7 @@ function runVM() {
                 term.write(commandHistory[cur])
                 command = commandHistory[cur]
             }
-        } else if (ev.keyCode == 40) {
+        } else if (key == '[B') {
             if (commandHistory.length > 0) {
                 cur = Math.min(commandHistory.length, cur + 1);
                 var i = 0;

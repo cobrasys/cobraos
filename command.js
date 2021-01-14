@@ -90,6 +90,11 @@ window.Commands = {
             term.writeln(window.directory);
         }
     },
+    'clear': (context) => {
+        const { stdout, args } = context;
+
+        term.reset();
+    },
     'write': (context) => {
         // print/edit/append contents of a file
         const { stdout, args } = context;
