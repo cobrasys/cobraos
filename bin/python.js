@@ -38,9 +38,12 @@ const pyRun = (context) => {
                 return;
             }
         }
+
+        var output = $('#edoutput');
         
         function outf(text) { 
             stdout.write(text.replace('\n', '\r\n'));
+            output.text(output.text() + text);
         } 
         function builtinRead(x) {
             if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
@@ -48,10 +51,19 @@ const pyRun = (context) => {
             return Sk.builtinFiles["files"][x];
         }
         
+        $('#clearoutput').click(function (e) {
+            $('#edoutput').text('');
+            $('#mycanvas').hide();
+        });
+
         function runit() { 
         var prog = code;
-        Sk.pre = "output";
         Sk.configure({output:outf, read:builtinRead, sysargv: args}); 
+        Sk.canvas = "mycanvas";
+        if (editor.getValue().indexOf('turtle') > -1 ) {
+            $('#mycanvas').show()
+        }
+        Sk.pre = "edoutput";
         (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
         window.showPrompt = false;
         var myPromise = Sk.misceval.asyncToPromise(function() {

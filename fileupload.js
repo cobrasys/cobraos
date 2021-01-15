@@ -11,6 +11,36 @@ function getFile(event) {
   }
 }
 
+function grabContent(filename) {
+    if(window.directory == '') {
+        // handle branches off of root
+        if(window.virtualDrive[''][filename]) {
+            if(window.virtualDrive[''][filename] instanceof(VirtualFile)) {
+                window.editor.setValue(window.virtualDrive[''][filename].content);
+            } else {
+                return;
+            }
+        }
+    } else {
+        // handle everything else
+        let workingdirectorysplit = window.directory.slice(1).split('/');
+        
+        let completestring = `window.virtualDrive['']`;
+        workingdirectorysplit.forEach(element => {
+            completestring += `['${element}']`;
+        });
+
+
+        if(eval(completestring + `['${filename}']`)) {
+            if(eval(completestring + `['${filename}']`) instanceof(VirtualFile)) {
+                window.editor.setValue(eval(completestring + `['${filename}']`).content);
+            } else {
+                return;
+            }
+        }
+    }
+}
+
 function uploadFile() {
 	window.currentFilename = document.getElementById('input-filename').value || 'newfile';
     	window.currentFilecontent = window.editor.getValue();
