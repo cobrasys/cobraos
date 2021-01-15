@@ -137,10 +137,10 @@ function runVM() {
     term.writeln('');
     term.prompt();
 
-    term.on("paste", function(data) {
+    /*term.on("paste", function(data) {
         command += data;
         term.write(data);
-    });
+    });*/
     term.on('key', function (key, ev) {
         if(!window.showPrompt) return;
         var printable = (
