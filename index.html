@@ -27,7 +27,7 @@
                     <p>Specify a file:</p>
                     <input class="btn" type="file" id="input-file"><br><br>
                     <button class="btn" onclick="uploadFile();" id="create-file">Upload To VM</button>
-                    <label for="input-filename" style="color: #818181;">Filename: </label><input placeholder="Filename..." onblur="grabContent(this.value);" type="text" id="input-filename" value="newfile"><br><br>
+                    <label for="input-filename" style="color: #818181;">Filename: </label><input placeholder="Filename..." onchange="grabContent(this.value);" type="text" id="input-filename" value="newfile"><br><br>
                 </div>
                 
                 <div id="content-target"></div>
