@@ -59,7 +59,11 @@ const pyRun = (context) => {
         Sk.configure({output:outf, read:builtinRead}); 
         (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
         var myPromise = Sk.misceval.asyncToPromise(function() {
-            return Sk.importMainWithBody("<stdin>", false, prog, true);
+            try {
+                return Sk.importMainWithBody(args[0], false, prog, true);
+            } catch (err) {
+                stdout.writeln(err);
+            }
         });
         myPromise.then(function(mod) {
             console.log('success');
