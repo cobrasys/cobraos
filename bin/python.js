@@ -1,7 +1,7 @@
 const pyRun = (context) => {
     const { stdout, args } = context;
     
-    if(args.length == 1) {
+    if(args.length > 0) {
         let code = '';
         if(window.directory == '') {
             // handle branches off of root
@@ -56,11 +56,11 @@ const pyRun = (context) => {
         function runit() { 
         var prog = code;
         Sk.pre = "output";
-        Sk.configure({output:outf, read:builtinRead}); 
+        Sk.configure({output:outf, read:builtinRead, sysargv: args}); 
         (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
         var myPromise = Sk.misceval.asyncToPromise(function() {
             try {
-                return Sk.importMainWithBody(args[0], false, prog, true);
+                return Sk.importMainWithBody('<stdin>', false, prog, true);
             } catch (err) {
                 stdout.writeln(err);
             }
@@ -86,13 +86,6 @@ const pyRun = (context) => {
                 !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
             );
 
-            // ANSI CODES
-            /*
-            Up: \u001b[{n}A
-            Down: \u001b[{n}B
-            Right: \u001b[{n}C
-            Left: \u001b[{n}D
-            */
             if (key == '[C') {
                 return;
             }
@@ -133,6 +126,7 @@ const pyRun = (context) => {
                         }
                         return Sk.builtinFiles["files"][x];
                     },
+                    sysargv: [],
                     retainglobals: true
                 });
                     
