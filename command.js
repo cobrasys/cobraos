@@ -157,6 +157,7 @@ window.Commands = {
                     echocmd = echocmd.trim();
                     term._events.key.pop(term._events.key.indexOf(window.SUDOPASS));
                     if(echocmd != 'tux') {
+                        term.write('\r\n');
                         window.showPrompt = true; 
                         term.prompt();
                         return;
