@@ -17,6 +17,11 @@ window.username = 'root';
 
 window.users = ['root', 'webnix'];
 
+window.usergroups = {
+    'root': 0,
+    'webnix': 1000
+}
+
 var __pkg = document.createElement('script');
 
 __pkg.setAttribute('src','pkg.js');
@@ -179,13 +184,15 @@ function runVM() {
             if(window.Commands[args[0]]) {
                 const Context = {
                     args: args.slice(1),
-                    stdout: term
+                    stdout: term,
+                    user: window.usergroups[window.username]
                 }
                 window.Commands[args[0]](Context);
             } else if(window.Packages[args[0]]) {
                 const Context = {
                     args: args.slice(1),
-                    stdout: term
+                    stdout: term,
+                    user: window.usergroups[window.username]
                 }
                 window.Packages[args[0]](Context);
             } else {

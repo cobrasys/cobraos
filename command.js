@@ -111,6 +111,99 @@ window.Commands = {
         else
             return;
     },
+    'sudo': (context) => {
+        const { stdout, args } = context;
+        var hasPermission = false;
+
+        if (window.usergroups[window.username] == 0) {
+            hasPermission = true;
+        } else if (window.usergroups[window.username] == 1001) {
+            hasPermission = true;
+        } else {
+            hasPermission = false;
+        }
+
+        if(hasPermission) {
+            if(window.Commands[args[0]]) {
+                const Context = {
+                    args: args.slice(1),
+                    stdout: term,
+                    user: 0
+                }
+                window.Commands[args[0]](Context);
+            } else if(window.Packages[args[0]]) {
+                const Context = {
+                    args: args.slice(1),
+                    stdout: term,
+                    user: 0
+                }
+                window.Packages[args[0]](Context);
+            } else {
+                term.writeln(`sudo: /bin/${args[0]} does not exist.`);
+            }
+        } else {
+            window.showPrompt = false;
+            var echocmd = '';
+            term.write('[su]: enter sudo password: ');
+            term.on('key', window.SUDOPASS = function (key, ev) {
+                var printable = (
+                    !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
+                );
+                if (ev.keyCode == 37 || ev.keyCode == 39) {
+                    return;
+                }
+                if (ev.keyCode == 13) {
+                    if(echocmd == '') return;
+                    echocmd = echocmd.trim();
+                    term._events.key.pop(term._events.key.indexOf(window.SUDOPASS));
+                    if(echocmd != 'tux') {
+                        window.showPrompt = true; 
+                        term.prompt();
+                        return;
+                    }
+                    term.write('\r\n');
+                    if(window.Commands[args[0]]) {
+                        const Context = {
+                            args: args.slice(1),
+                            stdout: term,
+                            user: 0
+                        }
+                        window.showPrompt = true;
+                        echocmd = '';
+                        window.Commands[args[0]](Context);
+                        //term.prompt();
+                    } else if(window.Packages[args[0]]) {
+                        const Context = {
+                            args: args.slice(1),
+                            stdout: term,
+                            user: 0
+                        }
+                        window.showPrompt = true;
+                        echocmd = '';
+                        window.Packages[args[0]](Context);
+                        //term.prompt();
+                    } else {
+                        term.writeln(`sudo: /bin/${args[0]} does not exist.`);
+                        window.showPrompt = true;
+                        term.prompt();
+                    }
+                    return;
+                } else if (ev.keyCode == 38) {
+                    return;
+                } else if (ev.keyCode == 40) {
+                    return;
+                } else if (ev.keyCode == 8) {
+                    if (echocmd.length > 0) {
+                        term.write('\b \b');
+                        echocmd = echocmd.substring(0, echocmd.length - 1)
+                    }
+                } else if (printable) {
+                    term.write('*');
+                    echocmd += key;
+                }
+            });
+        }
+    },
   
     // REPL-Style Commands
     'write': (context) => {
