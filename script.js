@@ -12,6 +12,11 @@ var commandHistory = [];
 var cur = 0;
 var command = "";
 
+window.hostname = localStorage.hostname ? localStorage.hostname : 'webnix';
+window.username = 'root';
+
+window.users = ['root', 'webnix'];
+
 var __pkg = document.createElement('script');
 
 __pkg.setAttribute('src','pkg.js');
@@ -131,7 +136,7 @@ function runVM() {
     window.directory = '';
 
     term.prompt = function () {
-        shellprompt = '\033[32;1m' + username + '@' + hostname + '\033[0m: \033[31;1m~' + directory + '\033[0m \033[34;1m#\033[0m ';
+        shellprompt = '\033[32;1m' + username + '@' + hostname + '\033[0m: \033[31;1m~' + directory + '\033[0m \033[34;1m' + (window.username == 'root' ? '#' : '$') + '\033[0m ';
         term.write('' + shellprompt);
     };
     term.writeln('');
