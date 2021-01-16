@@ -95,6 +95,24 @@ window.Commands = {
 
         term.reset();
     },
+    'su': (context) => {
+        const { stdout, args } = context;
+        function changeUser(newUser) {
+            if(users.includes(newUser) && newUser !== username) {
+                window.username = newUser;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        if(changeUser(args[0]))
+            return;
+        else
+            return;
+    }  
+  
+    // REPL-Style Commands
     'write': (context) => {
         // print/edit/append contents of a file
         const { stdout, args } = context;
