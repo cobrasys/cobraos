@@ -98,6 +98,8 @@ window.Commands = {
     'su': (context) => {
         const { stdout, args } = context;
         function changeUser(newUser) {
+            if(newUser == 'root' && window.usergroups[window.username] != 1001 && context.user != 0)
+                return;
             if(users.includes(newUser) && newUser !== username) {
                 window.username = newUser;
                 return true;
