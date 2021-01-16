@@ -110,7 +110,7 @@ window.Commands = {
             return;
         else
             return;
-    }  
+    },
   
     // REPL-Style Commands
     'write': (context) => {
