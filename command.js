@@ -27,7 +27,7 @@ window.Commands = {
                 if(content instanceof VirtualFile) {
                     stdout.writeln('\033[35;1m' + item + '\033[0m')
                 } else {
-                    stdout.writeln(item)
+                    stdout.writeln(item + '/')
                 }
             });
         }
