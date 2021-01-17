@@ -116,6 +116,7 @@ window.Commands = {
     'sudo': (context) => {
         const { stdout, args } = context;
         var hasPermission = false;
+        if(args.length == 0) return;
 
         if (window.usergroups[window.username] == 0) {
             hasPermission = true;
