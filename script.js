@@ -12,14 +12,14 @@ var commandHistory = [];
 var cur = 0;
 var command = "";
 
-window.hostname = localStorage.hostname ? localStorage.hostname : 'webnix';
-window.username = 'root';
+window.hostname = localStorage.hostname ? localStorage.hostname : 'localhost';
+window.username = 'user';
 
-window.users = ['root', 'webnix'];
+window.users = ['root', 'user'];
 
 window.usergroups = {
     'root': 0,
-    'webnix': 1000
+    'user': 1000
 }
 
 var __pkg = document.createElement('script');
@@ -65,23 +65,13 @@ window.virtualDrive = {
             'cd': new VirtualFile('cd', '\x23' * 52),
         },
         'home': {
-            'webnix': {
+            'user': {
                 'readme.txt': new VirtualFile('readme.txt', 'hello')
             }
         },
-        'hello.cpp': new VirtualFile('hello.cpp', `
-#include <iostream>
-using namespace std;
-int main() {
-    cout << "Hello World!" << endl;
-    return 0;
-}
-        `),
-        'hello.py': new VirtualFile('hello.py', `
-import uuid
-
-print(uuid.uuidv4())
-        `),
+        'root': {
+              
+        },
     },
 }
 
