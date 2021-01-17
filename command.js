@@ -34,7 +34,7 @@ window.Commands = {
     },
     'cd': (context) => {
         // change current working directory
-
+        if(args.length == 0) return;
         const { stdout, args } = context;
 
         if(args[0] == '..') {
@@ -146,7 +146,7 @@ window.Commands = {
         } else {
             window.showPrompt = false;
             var echocmd = '';
-            term.write('[su]: enter sudo password: ');
+            term.write('enter sudo password: ');
             term.on('key', window.SUDOPASS = function (key, ev) {
                 var printable = (
                     !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
