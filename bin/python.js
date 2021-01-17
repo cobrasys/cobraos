@@ -43,7 +43,6 @@ const pyRun = (context) => {
         
         function outf(text) { 
             stdout.write(text.replace('\n', '\r\n'));
-            output.text(output.text() + text);
         } 
         function builtinRead(x) {
             if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
