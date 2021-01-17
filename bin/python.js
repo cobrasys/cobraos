@@ -86,8 +86,7 @@ const pyRun = (context) => {
         runit()
     } else if(args.length == 0) {
         stdout.writeln("Python 3.7 (webnix, " + new Date() + ")");
-        stdout.writeln("[" + navigator.userAgent + "] on " + navigator.platform);
-        stdout.writeln('Don\'t type "help", "copyright", "credits" or "license" unless you\'ve assigned something to them');
+        //stdout.writeln("[" + navigator.userAgent + "] on " + navigator.platform);
         window.showPrompt = false;
         var echocmd = '';
         var startPrompt = false;
