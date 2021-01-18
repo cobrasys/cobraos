@@ -255,6 +255,7 @@ window.Commands = {
             if(users.includes(newUser) && newUser !== username) {
                 window.username = newUser;
                 window.loginTime[newUser] = new Date();
+                window.directory = window.userInfo[window.username].homeDirectory;
                 return true;
             } else {
                 return false;
