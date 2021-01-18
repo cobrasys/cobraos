@@ -22,11 +22,16 @@ window.usergroups = {
     'user': 1000
 }
 
+window.loginTime = {
+    'user': new Date(),
+}
+
 var __pkg = document.createElement('script');
 
 __pkg.setAttribute('src','pkg.js');
 
 document.head.appendChild(__pkg);
+
 
 
 class VirtualFile {
@@ -60,20 +65,27 @@ window.showPrompt = true;
 window.virtualDrive = {
     '':  {
         'bin': {
-            'ls': new VirtualFile('ls', '\x16' * 59),
-            'echo': new VirtualFile('echo', '\x20' * 49),
-            'cd': new VirtualFile('cd', '\x23' * 52),
+
         },
         'home': {
             'user': {
                 'readme.txt': new VirtualFile('readme.txt', 'hello')
             }
         },
-        'root': {
-              
-        },
+        'tmp': {},
+        'usr': {},
+        'sbin': {},
+        'dev': {},
+        'sys': {},
+        'mnt': {},
+        'tmp': {},
+        'var': {},
     },
 }
+
+Object.entries(window.Commands).forEach(element => {
+    
+});
 
 function closepopup() {
     var popup = document.getElementById("popup");

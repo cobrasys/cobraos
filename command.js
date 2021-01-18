@@ -5,6 +5,158 @@ window.Commands = {
 
         stdout.writeln(args.join(' '));
     },
+    'whoami': (context) => {
+        const { stdout, args } = context;
+
+        stdout.writeln(window.username);
+    },
+    'id': (context) => {
+        const { stdout, args, user } = context;
+        
+        stdout.writeln(`uid=${user} gid=${user == 0 ? '0(root)' : '10(default)'}`);
+    },
+    'who': (context) => {
+        const { stdout, args, user } = context;
+
+        stdout.writeln(`${window.username}\t${'xterm/1'}\t\t${window.loginTime[window.username].toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\t\t(:0)`)
+    },
+    'w': (context) => {
+        const { stdout, args, user } = context;
+
+        stdout.writeln(`${new Date().toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}\tup unknown,\t${Object.entries(window.loginTime).length} users`);
+        stdout.writeln(`User\ttty\t\tlogin@\t\t\t\twhat`);
+        stdout.writeln(`${window.username}\txterm/1\t\t${window.loginTime[window.username].toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}\t\tcbrsh`);
+    },
+    'date': (context) => {
+        const { stdout, args, user } = context;
+
+        stdout.writeln(new Date());
+    },
+    'mkdir': (context) => {
+        const { stdout, args } = context;
+
+        if(args.length == 0) return;
+        let completestring = `window.virtualDrive['']`;
+        if(window.directory != '') {
+            let workingdirectorysplit = window.directory.slice(1).split('/');
+
+            workingdirectorysplit.forEach(element => {
+                // build eval string
+                completestring += `['${element}']`;
+            });
+        }
+
+        if(eval(completestring)) {
+            var directory = eval(completestring);
+            
+            if(directory[args[0]]) {
+                stdout.writeln('mkdir: file already exists');
+                return;
+            } else {
+                directory[args[0]] = {};
+            }
+        }
+    },
+    'touch': (context) => {
+        const { stdout, args } = context;
+
+        if(args.length == 0) return;
+        let completestring = `window.virtualDrive['']`;
+        if(window.directory != '') {
+            let workingdirectorysplit = window.directory.slice(1).split('/');
+
+            workingdirectorysplit.forEach(element => {
+                // build eval string
+                completestring += `['${element}']`;
+            });
+        }
+
+        if(eval(completestring)) {
+            var directory = eval(completestring);
+            
+            if(directory[args[0]] && !(directory[args[0]] instanceof VirtualFile)) {
+                stdout.writeln('touch: is a directory');
+                return;
+            } else {
+                if(directory[args[0]]) {
+
+                } else {
+                    directory[args[0]] = new VirtualFile(args[0], '');
+                }
+            }
+        }
+    },
+    'rmdir': (context) => {
+        const { stdout, args } = context;
+
+        if(args.length == 0) return;
+
+        let completestring = `window.virtualDrive['']`;
+        if(window.directory != '') {
+            let workingdirectorysplit = window.directory.slice(1).split('/');
+
+            workingdirectorysplit.forEach(element => {
+                // build eval string
+                completestring += `['${element}']`;
+            });
+        }
+
+        if(eval(completestring)) {
+            var directory = eval(completestring);
+            if(!directory[args[0]]) {
+                stdout.writeln('rmdir: ' + args[0] + ': no file or directory')
+                return;
+            }
+            if(directory[args[0]] instanceof VirtualFile) {
+                stdout.writeln('rmdir: ' + args[0] + ': is a file')
+                return;
+            
+            } else {
+                if(Object.entries(directory[args[0]]).length != 0) {
+                    stdout.writeln('rmdir: ' + args[0] + ': directory not empty')
+                    return;
+                } else {
+                    delete directory[args[0]];
+                    return;
+                }
+            }
+        }
+    },
+    'rm': (context) => {
+        const { stdout, args } = context;
+
+        if(args.length == 0) return;
+        let force = false;
+
+        if(args.includes('-r')) force = true;
+        let completestring = `window.virtualDrive['']`;
+        if(window.directory != '') {
+            let workingdirectorysplit = window.directory.slice(1).split('/');
+
+            workingdirectorysplit.forEach(element => {
+                // build eval string
+                completestring += `['${element}']`;
+            });
+        }
+
+        if(eval(completestring)) {
+            var directory = eval(completestring);
+            
+            if(directory[args.slice(-1)[0]] instanceof VirtualFile) {
+                delete directory[args.slice(-1)[0]];
+                return;
+            
+            } else {
+                if(!force) {
+                    stdout.writeln('rm: ' + args.slice(-1)[0] + ': is not a file')
+                    return;
+                } else {
+                    delete directory[args.slice(-1)[0]];
+                    return;
+                }
+            }
+        }
+    },
     'ls': (context) => {
         // list contents in current working directory
         const { stdout, args } = context;
@@ -34,8 +186,8 @@ window.Commands = {
     },
     'cd': (context) => {
         // change current working directory
-        if(args.length == 0) return;
         const { stdout, args } = context;
+        if(args.length == 0) return;
 
         if(args[0] == '..') {
             // handle previous directory path traversal
@@ -102,6 +254,7 @@ window.Commands = {
                 return;
             if(users.includes(newUser) && newUser !== username) {
                 window.username = newUser;
+                window.loginTime[newUser] = new Date();
                 return true;
             } else {
                 return false;
@@ -147,7 +300,7 @@ window.Commands = {
         } else {
             window.showPrompt = false;
             var echocmd = '';
-            term.write('enter sudo password: ');
+            term.write('[su]: enter sudo password: ');
             term.on('key', window.SUDOPASS = function (key, ev) {
                 var printable = (
                     !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
