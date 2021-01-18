@@ -25,9 +25,25 @@ window.usergroups = {
 window.userInfo = {
     'root': {
         homeDirectory: '',
+        env: {
+            'TERM': 'xterm',
+            'PATH': '/bin:/usr/bin:/sbin:/usr/local/bin',
+            'HOME': '/',
+            'SHELL': '/bin/cbrsh',
+            'HISTSIZE': '200',
+            'HISTFILE': ''
+        },
     },
     'user': {
         homeDirectory: '/home/user',
+        env: {
+            'TERM': 'xterm',
+            'PATH': '/bin:/usr/bin:/sbin:/usr/local/bin',
+            'HOME': '/',
+            'SHELL': '/bin/cbrsh',
+            'HISTSIZE': '200',
+            'HISTFILE': ''
+        },
     },
 }
 
@@ -94,8 +110,8 @@ window.virtualDrive = {
     },
 }
 
-Object.entries(window.Commands).forEach(element => {
-    
+Object.entries(window.Commands).forEach(([name, func]) => {
+    window.virtualDrive['']['bin'][name] = new VirtualFile(name, func.toString());
 });
 
 function closepopup() {
