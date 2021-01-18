@@ -19,8 +19,18 @@ window.users = ['root', 'user'];
 
 window.usergroups = {
     'root': 0,
-    'user': 1000
+    'user': 100
 }
+
+window.userInfo = {
+    'root': {
+        homeDirectory: '',
+    },
+    'user': {
+        homeDirectory: '/home/user',
+    },
+}
+
 
 window.loginTime = {
     'user': new Date(),
