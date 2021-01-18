@@ -172,7 +172,7 @@ function runVM() {
     window.directory = window.userInfo[username].homeDirectory;
 
     term.prompt = function () {
-        shellprompt = '\033[32;1m' + username + '@' + hostname + '\033[0m: \033[31;1m~' + (directory == window.userInfo[username].homeDirectory ? '' : directory) + '\033[0m \033[34;1m' + (window.username == 'root' ? '#' : '$') + '\033[0m ';
+        shellprompt = '\033[32;1m' + username + '@' + hostname + '\033[0m: \033[31;1m~' + (directory == window.userInfo[username].homeDirectory ? '' : (directory == '' ? '/' : directory)) + '\033[0m \033[34;1m' + (window.username == 'root' ? '#' : '$') + '\033[0m ';
         term.write('' + shellprompt);
     };
     term.writeln('');
