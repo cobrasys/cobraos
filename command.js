@@ -10,6 +10,20 @@ window.Commands = {
 
         stdout.writeln(window.username);
     },
+    'history': (context) => {
+        const { stdout, args } = context;
+
+        commandHistory.forEach((command, index) => {
+            stdout.writeln('\033[31;1m' + (index + 1) + '\033[0m \033[34;1m' + command + '\033[0m');
+        })
+    },
+    '!!': (context) => {
+        const { stdout, args } = context;
+        
+        commandHistory.forEach((command, index) => {
+            stdout.writeln('\033[31;1m' + (index + 1) + '\033[0m \033[34;1m' + command + '\033[0m');
+        })
+    },
     'id': (context) => {
         const { stdout, args, user } = context;
         
@@ -372,7 +386,7 @@ window.Commands = {
                 // handle branches off of root
                 if(window.virtualDrive[''][args[0]]) {
                     if(window.virtualDrive[''][args[0]] instanceof(VirtualFile)) {
-                        stdout.writeln(window.virtualDrive[''][args[0]].content);
+                        stdout.write(window.virtualDrive[''][args[0]].content);
                     } else {
                         stdout.writeln('cat: ' + args[0] + ': is a directory.');
                         return;
@@ -392,7 +406,7 @@ window.Commands = {
 
                 if(eval(completestring + `['${args[0]}']`)) {
                     if(eval(completestring + `['${args[0]}']`) instanceof(VirtualFile)) {
-                        stdout.writeln(eval(completestring + `['${args[0]}']`).content);
+                        stdout.write(eval(completestring + `['${args[0]}']`).content);
                     } else {
                         stdout.writeln('cat: ' + args[0] + ': is a directory.');
                         return;

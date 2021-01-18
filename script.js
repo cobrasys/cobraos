@@ -203,7 +203,6 @@ function runVM() {
             if(command == '') {
                 term.writeln(' ')
                 term.prompt();
-                commandHistory.push(command);
                 cur = commandHistory.length;
                 command = "";
                 return;
@@ -211,6 +210,37 @@ function runVM() {
             term.write('\r\n')
             // Hmmmm
             const args = command.split(' ');
+            
+            commandHistory.push(command);
+
+            const historyre = /^![0-9]+$/g;
+            if(historyre.test(command)){
+                let req = command.replace('!', '');
+                console.log(req);
+                let index = parseInt(req) - 1;
+                console.log(index);
+                if(window.Commands[commandHistory[index]]) {
+                    const Context = {
+                        args: args.slice(1),
+                        stdout: term,
+                        user: window.usergroups[window.username]
+                    }
+                    window.Commands[commandHistory[index]](Context);
+                } else if(window.Packages[commandHistory[index]]) {
+                    const Context = {
+                        args: args.slice(1),
+                        stdout: term,
+                        user: window.usergroups[window.username]
+                    }
+                    window.Packages[commandHistory[index]](Context);
+                } else {
+                    term.writeln(`/bin/${commandHistory[index]} does not exist.`);
+                }
+                cur = commandHistory.length;
+                command = "";
+                term.prompt();
+                return;
+            }
 
             if(window.Commands[args[0]]) {
                 const Context = {
@@ -231,13 +261,11 @@ function runVM() {
             }
 
             if(!window.showPrompt) {
-                commandHistory.push(command);
                 cur = commandHistory.length;
                 command = "";
             }
             if (!loadingBar && window.showPrompt) {
                 term.prompt();
-                commandHistory.push(command);
                 cur = commandHistory.length;
                 command = "";
             }
