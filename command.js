@@ -46,6 +46,11 @@ window.Commands = {
 
         stdout.writeln(new Date());
     },
+    'cut': (context) => {
+        const { stdout, args, user } = context;
+
+        return;
+    },
     'mkdir': (context) => {
         const { stdout, args } = context;
 
