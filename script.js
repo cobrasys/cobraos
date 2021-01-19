@@ -209,8 +209,9 @@ function runVM() {
             }
             term.write('\r\n')
             // Hmmmm
-            const args = command.split(' ');
-            args = parseStringArguments(args);
+            let args = new Array(command.split(' ')[0]);
+            const argSs = command.split(' ');
+            args = parseStringArguments(argSs);
             
             commandHistory.push(command);
 
