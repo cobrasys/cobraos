@@ -47,10 +47,8 @@ window.Commands = {
     'echo': (context) => {
         // echo input
         const { stdout, args } = context;
-
-        let strparsed = parseStringArguments(args);
         
-        stdout.writeln(strparsed.join(' '));
+        stdout.writeln(args.join(' '));
     },
     'whoami': (context) => {
         const { stdout, args } = context;
