@@ -1,6 +1,5 @@
-window.parseArgumentsOpts = function(sttring) {
+window.parseArgumentsOpts = function(strippedArgs) {
     var parsedArgs = {};
-    var strippedArgs = sttring.split(' ');
 
     strippedArgs.forEach(function (argument) {
       var key = argument.split('=')[0];
@@ -195,7 +194,7 @@ window.Commands = {
         if(args.length == 0) return;
         let force = false;
         
-        let parsed = parseArgumentsOpts(args.join(' '));
+        let parsed = parseArgumentsOpts(args);
         
         if(parsed['r']) force = true;
         
