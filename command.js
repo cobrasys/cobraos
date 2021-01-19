@@ -96,7 +96,7 @@ window.Commands = {
 
         if(args.length == 0) return;
         
-        let delimiter = 
+        //let delimiter = 
         return;
     },
     'mkdir': (context) => {
