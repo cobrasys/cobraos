@@ -1,6 +1,6 @@
 window.parseArgumentsOpts = function(sttring) {
     var parsedArgs = {};
-    var strippedArgs = sttring;
+    var strippedArgs = sttring.split(' ');
 
     strippedArgs.forEach(function (argument) {
       var key = argument.split('=')[0];
