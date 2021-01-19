@@ -20,24 +20,24 @@ window.parseStringArguments = function(args) {
     let string = '';
     let readingString = false;
     args.forEach(arg => {
-        
+        arg = arg.replace(/\\"/g, 'escthequoteusingakeywordthatyouprobablywouldnttry');
         if(readingString) {
-            if(arg.endsWith('"')) {
+            if(arg.slice(-1) == '"') {
                 readingString = false;
-                string += arg.replace('"', '');
+                string += arg.replace(/"/g, '').replace(/escthequoteusingakeywordthatyouprobablywouldnttry/g, '"');
                 output.push(string);
                 string = '';
             } else {
-                string += arg.replace('"', '') + ' ';
+                string += arg.replace(/"/g, '').replace(/escthequoteusingakeywordthatyouprobablywouldnttry/g, '"') + ' ';
             }
-        } else if(arg.startsWith('"') && arg.endsWith('"')) {
-            output.push(arg.replace('"', '"'));
+        } else if(arg.slice(0, 1) == '"' && arg.slice(-1) == '"') {
+            output.push(arg.replace(/"/g, '').replace(/escthequoteusingakeywordthatyouprobablywouldnttry/g, '"'));
             
-        } else if (arg.startsWith('"')) {
+        } else if (arg.slice(0, 1) == '"') {
             readingString = true;
-            string += arg.replace('"', '') + ' ';
+            string += arg.replace(/"/g, '').replace(/escthequoteusingakeywordthatyouprobablywouldnttry/g, '"') + ' ';
         } else {
-            output.push(arg);
+            output.push(arg.replace(/escthequoteusingakeywordthatyouprobablywouldnttry/g, '"'));
         }
     });
     return output;
