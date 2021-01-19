@@ -210,6 +210,7 @@ function runVM() {
             term.write('\r\n')
             // Hmmmm
             const args = command.split(' ');
+            args = parseStringArguments(args);
             
             commandHistory.push(command);
 
