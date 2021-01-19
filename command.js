@@ -194,8 +194,11 @@ window.Commands = {
 
         if(args.length == 0) return;
         let force = false;
-
-        if(args.includes('-r')) force = true;
+        
+        let parsed = parseArgumentsOpts(args.join(' '));
+        
+        if(parsed['r']) force = true;
+        
         let completestring = `window.virtualDrive['']`;
         if(window.directory != '') {
             let workingdirectorysplit = window.directory.slice(1).split('/');
