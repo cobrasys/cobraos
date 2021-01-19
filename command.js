@@ -48,7 +48,9 @@ window.Commands = {
         // echo input
         const { stdout, args } = context;
 
-        stdout.writeln(args.join(' '));
+        let strparsed = parseStringArguments(args);
+        
+        stdout.writeln(strparsed.join(' '));
     },
     'whoami': (context) => {
         const { stdout, args } = context;
