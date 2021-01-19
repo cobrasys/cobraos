@@ -1,3 +1,49 @@
+window.parseArgumentsOpts = function(sttring) {
+    var parsedArgs = {};
+    var strippedArgs = sttring;
+
+    strippedArgs.forEach(function (argument) {
+      var key = argument.split('=')[0];
+      var value = argument.split('=')[1];
+
+      var index = 0;
+      while (key[index] === '-')
+        index++;
+      key = key.slice(index);
+      parsedArgs[key] = typeof value !== 'undefined' ? value : true;
+    });
+    return parsedArgs;
+}
+
+window.parseStringArguments = function(args) {
+    let output = [];
+    let string = '';
+    let readingString = false;
+    args.forEach(arg => {
+        
+        if(readingString) {
+            if(arg.endsWith('"')) {
+                readingString = false;
+                string += arg.replace('"', '');
+                output.push(string);
+                string = '';
+            } else {
+                string += arg.replace('"', '');
+            }
+        } else if(arg.startsWith('"') && arg.endsWith('"')) {
+            output.push(arg.replace('"', '"'));
+            
+        } else if (arg.startsWith('"')) {
+            readingString = true;
+            string += arg.replace('"', '');
+        } else {
+            output.push(arg);
+        }
+    });
+    return output;
+}
+
+
 window.Commands = {
     'echo': (context) => {
         // echo input
@@ -49,6 +95,9 @@ window.Commands = {
     'cut': (context) => {
         const { stdout, args, user } = context;
 
+        if(args.length == 0) return;
+        
+        let delimiter = 
         return;
     },
     'mkdir': (context) => {
