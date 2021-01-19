@@ -53,7 +53,6 @@ const Run = (context) => {
         unsigned_overflow: "error" // can be "error"(default), "warn" or "ignore"
     };
     var exitCode = window.JSCPP.run(code, input, config);
-	
 }
 
 window.Packages['g++'] = Run;
