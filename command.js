@@ -28,21 +28,20 @@ window.parseStringArguments = function(args) {
                 output.push(string);
                 string = '';
             } else {
-                string += arg.replace('"', '');
+                string += arg.replace('"', '') + ' ';
             }
         } else if(arg.startsWith('"') && arg.endsWith('"')) {
             output.push(arg.replace('"', '"'));
             
         } else if (arg.startsWith('"')) {
             readingString = true;
-            string += arg.replace('"', '');
+            string += arg.replace('"', '') + ' ';
         } else {
             output.push(arg);
         }
     });
     return output;
 }
-
 
 window.Commands = {
     'echo': (context) => {
