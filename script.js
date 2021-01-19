@@ -221,22 +221,22 @@ function runVM() {
                 console.log(req);
                 let index = parseInt(req) - 1;
                 console.log(index);
-                if(window.Commands[commandHistory[index]]) {
+                if(window.Commands[commandHistory[index].split(' ')[0]]) {
                     const Context = {
                         args: args.slice(1),
                         stdout: term,
                         user: window.usergroups[window.username]
                     }
-                    window.Commands[commandHistory[index]](Context);
-                } else if(window.Packages[commandHistory[index]]) {
+                    window.Commands[commandHistory[index].split(' ')[0]](Context);
+                } else if(window.Packages[commandHistory[index].split(' ')[0]]) {
                     const Context = {
                         args: args.slice(1),
                         stdout: term,
                         user: window.usergroups[window.username]
                     }
-                    window.Packages[commandHistory[index]](Context);
+                    window.Packages[commandHistory[index].split(' ')[0]](Context);
                 } else {
-                    term.writeln(`/bin/${commandHistory[index]} does not exist.`);
+                    term.writeln(`/bin/${commandHistory[index].split(' ')[0]} does not exist.`);
                 }
                 cur = commandHistory.length;
                 command = "";
