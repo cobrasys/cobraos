@@ -216,8 +216,8 @@ function runVM() {
             commandHistory.push(command);
 
             const historyre = /^![0-9]+$/g;
-            if(historyre.test(command)){
-                let req = command.replace('!', '');
+            if(historyre.test(args[0])){
+                let req = args[0].replace('!', '');
                 console.log(req);
                 let index = parseInt(req) - 1;
                 console.log(index);
