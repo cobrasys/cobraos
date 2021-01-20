@@ -61,6 +61,56 @@ window.Commands = {
             stdout.writeln('\033[31;1m' + (index + 1) + '\033[0m \033[34;1m' + command + '\033[0m');
         })
     },
+    'modusername': (context) => {
+        const { stdout, args, user } = context;
+
+        if(args.length == 0) return;
+
+        if(args.length != 2) return;
+        let old = args[0];
+
+        let newn = args[1];
+        if(window.username == old || user == 0) {
+            if(old == 'root') {
+                stdout.writeln('modusername: cannot change name for user "root"');
+                return;
+            }
+            if(newn == 'root') {
+                stdout.writeln('modusername: cannot change name to "root"');
+                return;
+            }
+            if(users.includes(newn)) {
+                stdout.writeln('modusername: cannot change name to existing user');
+                return;
+            }
+
+            if(!users.includes(old)) {
+                stdout.writeln('modusername: user does not exist');
+                return;
+            }
+
+            // add new information
+            window.usergroups[newn] = window.usergroups[old];
+            window.userInfo[newn] = window.userInfo[old];
+            window.userInfo[newn].homeDirectory = window.userInfo[newn].homeDirectory.replace(old, newn);
+            window.virtualDrive['']['home'][newn] = window.virtualDrive['']['home'][old];
+            let tempusers = window.users;
+            tempusers.push(newn);
+            if(window.username == old) {
+                window.username = newn;
+                window.directory = window.userInfo[newn].homeDirectory;
+            }
+            // remove old information
+            delete window.usergroups[old];
+            delete window.userInfo[old];
+            tempusers.splice(tempusers.indexOf(old), 1);
+            window.users = tempusers;
+            delete window.virtualDrive['']['home'][old];
+        } else {
+            stdout.writeln('modusername: missing permissions to change another username');
+        }
+
+    },
     '!!': (context) => {
         const { stdout, args } = context;
         
@@ -319,9 +369,9 @@ window.Commands = {
     'su': (context) => {
         const { stdout, args } = context;
         function changeUser(newUser) {
-            if(newUser == 'root' && window.usergroups[window.username] != 1001 && context.user != 0)
+            if(newUser == 'root' && window.usergroups[window.username] != 100 && context.user != 0)
                 return;
-            if(users.includes(newUser) && newUser !== username) {
+            if(window.users.includes(newUser) && newUser !== username) {
                 window.username = newUser;
                 window.loginTime[newUser] = new Date();
                 window.directory = window.userInfo[window.username].homeDirectory;
@@ -370,7 +420,7 @@ window.Commands = {
         } else {
             window.showPrompt = false;
             var echocmd = '';
-            term.write('[su]: enter sudo password: ');
+            term.write('[sudo]: enter sudo password: ');
             term.on('key', window.SUDOPASS = function (key, ev) {
                 var printable = (
                     !ev.altKey && !ev.altGraphKey && !ev.ctrlKey && !ev.metaKey
