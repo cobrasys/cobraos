@@ -66,20 +66,27 @@ window.Packages.pkg = async function(context) {
         case 'list':
             window.showPrompt = false;
             stdout.writeln('pkg: list: fetching package lists...');
-            stdout.writeln('GET 1: https://raw.githubusercontent.com/cobrasys/cobraos-packagelists/main/packagelist.json');
-            let rresponse = await fetch('https://raw.githubusercontent.com/cobrasys/cobraos-packagelists/main/packagelist.json')
-            let ddata = await rresponse.json();
+            let ssources = window.virtualDrive['']['etc']['pkg']['sources.list'].content.split('\n');
+            await ssources.forEach(async (source, index) => {
+                if(source.startsWith('#')) return;
+                let namesource = source.split(' : ')[0]
+                let urlsource = source.split(' : ')[1];
+                if(namesource == undefined || urlsource == undefined) return;
+                stdout.writeln(`GET ${namesource}: ${urlsource}`);
+                let rresponse = await fetch(urlsource);
+                let ddata = await rresponse.json();
 
-            let pprovider = ddata.provider;
-            let ppackages = ddata.packages;
-            stdout.write('\r\n\r\n');
-            stdout.writeln('pkg: list: packages found:');
-            stdout.write('\r\n');
-            Object.keys(ppackages).forEach(name => {
-                stdout.writeln(name);
-            });
-            window.showPrompt = true;
-            term.prompt();
+                let pprovider = ddata.provider;
+                let ppackages = ddata.packages;
+                stdout.write('\r\n\r\n');
+                stdout.writeln('pkg: list: packages found:');
+                stdout.write('\r\n');
+                Object.keys(ppackages).forEach(name => {
+                    stdout.writeln(name);
+                });
+            })
+            window.showPrompt = true
+
             break;
         case 'install':
             if(user != 0) {
@@ -88,41 +95,48 @@ window.Packages.pkg = async function(context) {
             }
             _babelPolyfill = false;
             window.showPrompt = false;
+            let sources = window.virtualDrive['']['etc']['pkg']['sources.list'].content.split('\n');
             stdout.writeln('pkg: install: ' + args[1] + ': fetching package lists...');
-            stdout.writeln('GET 1: https://raw.githubusercontent.com/cobrasys/cobraos-packagelists/main/packagelist.json');
-            let response = await fetch('https://raw.githubusercontent.com/cobrasys/cobraos-packagelists/main/packagelist.json')
-            let data = await response.json();
+            sources.forEach(async (source, index) => {
+                if(source.startsWith('#')) return;
+                let namesource = source.split(' : ')[0];
+                let urlsource = source.split(' : ')[1];
+                if(namesource == undefined || urlsource == undefined) return;
+                stdout.writeln(`GET ${namesource}: ${urlsource}`);
+                let response = await fetch(urlsource);
+                let data = await response.json();
 
-            let provider = data.provider;
-            let packages = data.packages;
-            if(Object.keys(packages).includes(args[1])) {
-                let version = data.packages[args[1]].version;
-                let codesource = data.packages[args[1]].codesource;
-                console.log(data);
-                stdout.writeln('pkg: install: ' + args[1] + ': fetching package source...');
-                stdout.writeln('GET 2: ' + codesource);
-                let response = await fetch(codesource);
-                let code = await response.text();
+                let provider = data.provider;
+                let packages = data.packages;
+                if(Object.keys(packages).includes(args[1])) {
+                    let version = data.packages[args[1]].version;
+                    let codesource = data.packages[args[1]].codesource;
+                    console.log(data);
+                    stdout.writeln('pkg: install: ' + args[1] + ': fetching package source...');
+                    stdout.writeln('GET: ' + codesource);
+                    let response = await fetch(codesource);
+                    let code = await response.text();
 
 
 
 
-                code = `
-                const { stdout, args, user } = arguments[0];
+                    code = `
+                    const { stdout, args, user } = arguments[0];
 
-                ${code}
-                `;
-                let codefunc = new Function(code);
-                window.Packages[args[1]] = codefunc;
-                stdout.writeln('pkg: install: ' + args[1] + ': writing changes to local packages')
-                window.showPrompt = true;
-                term.prompt();
-            } else {
-                stdout.writeln('pkg: install: ' + args[1] + ': cannot find package in repo.');
-                window.showPrompt = true;
-                term.prompt();
-                break;
-            }
+                    ${code}
+                    `;
+                    let codefunc = new Function(code);
+                    window.Packages[args[1]] = codefunc;
+                    stdout.writeln('pkg: install: ' + args[1] + ': writing changes to local packages')
+                    window.showPrompt = true;
+                    term.prompt();
+                    return;
+                } else {
+                    return;
+                }
+            });
+            window.showPrompt = true;
+            //term.prompt();
             
             break;
     }

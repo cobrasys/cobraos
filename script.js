@@ -96,7 +96,7 @@ window.virtualDrive = {
         },
         'home': {
             'user': {
-                'readme.txt': new VirtualFile('readme.txt', 'hello')
+                'readme.txt': new VirtualFile('readme.txt', 'hello'),
             }
         },
         'tmp': {},
@@ -107,6 +107,11 @@ window.virtualDrive = {
         'mnt': {},
         'tmp': {},
         'var': {},
+        'etc': {
+            'pkg': {
+                'sources.list': new VirtualFile('sources.list', `# sources for package manager, add new like so\n\ncobraosofficial.pkg.repo : https://raw.githubusercontent.com/cobrasys/cobraosofficial.pkg.repo/main/packagelist.json`),
+            }
+        },
     },
 }
 
