@@ -164,6 +164,35 @@ function createTerminal() {
 }
 
 function runVM() {
+    if(localStorage.runAtStart) {
+        let runArgs = JSON.parse(localStorage.runAtStart);
+        runArgs.forEach((cmd, index) => {
+            term.writeln('Running CobraSh Start...');
+            term.write('cobrash-ras> ');
+            term.write(cmd);
+            let args = new Array(cmd.split(' ')[0]);
+            const argSs = cmd.split(' ');
+            args = parseStringArguments(argSs);
+            term.write('\r\n');
+            if(window.Commands[args[0]]) {
+                const Context = {
+                    args: args.slice(1),
+                    stdout: term,
+                    user: window.usergroups[window.username]
+                }
+                window.Commands[args[0]](Context);
+            } else if(window.Packages[args[0]]) {
+                const Context = {
+                    args: args.slice(1),
+                    stdout: term,
+                    user: window.usergroups[window.username]
+                }
+                window.Packages[args[0]](Context);
+            } else {
+                term.writeln(`/bin/${args[0]} does not exist.`);
+            }
+        });
+    }
     setTerminalSize();
 
     var shellprompt;
