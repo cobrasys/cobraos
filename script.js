@@ -110,7 +110,7 @@ window.virtualDrive = {
         'etc': {
             'pkg': {
                 'sources.list': new VirtualFile('sources.list', `# sources for package manager, add new like so\n\ncobraosofficial.pkg.repo : https://raw.githubusercontent.com/cobrasys/cobraosofficial.pkg.repo/main/packagelist.json`),
-            }
+            },
         },
     },
 }

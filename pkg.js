@@ -22,6 +22,7 @@ let localPackageList = [
     'g++',
     'python',
     'compressionutils',
+    'mail',
 ];
 
 window.Packages = {};
@@ -138,7 +139,6 @@ window.Packages.pkg = async function(context) {
                     stdout.writeln('GET: ' + codesource);
                     let response = await fetch(codesource);
                     let code = await response.text();
-
 
 
 
