@@ -88,16 +88,38 @@ window.Packages.pkg = async function(context) {
             window.showPrompt = true
 
             break;
+        
+        case 'addsource':
+            if(user != 0) {
+                stdout.writeln('pkg: ERROR: missing permissions to write to package directory, are you root?');
+                return;
+            }
+            window.showPrompt = false;
+            stdout.writeln('pkg: adding package list...');
+
+            let rrresponse = await fetch(args[1]);
+            let dddata = await rrresponse.json();
+
+            let ppprovider = dddata.provider;
+            let pppackages = dddata.packages;
+            console.log(ppprovider);
+
+            stdout.writeln('pkg: writing changes to local package list');
+            window.virtualDrive['']['etc']['pkg']['sources.list'].append(`${ppprovider} : ${args[1]}`);
+            window.showPrompt = true;
+            stdout.prompt();
+            break;
         case 'install':
             if(user != 0) {
                 stdout.writeln('pkg: ERROR: missing permissions to write to package directory, are you root?');
                 return;
             }
             _babelPolyfill = false;
+            if(args.length != 2) return;
             window.showPrompt = false;
             let sources = window.virtualDrive['']['etc']['pkg']['sources.list'].content.split('\n');
             stdout.writeln('pkg: install: ' + args[1] + ': fetching package lists...');
-            sources.forEach(async (source, index) => {
+            await sources.forEach(async (source, index) => {
                 if(source.startsWith('#')) return;
                 let namesource = source.split(' : ')[0];
                 let urlsource = source.split(' : ')[1];
