@@ -168,7 +168,7 @@ function runVM() {
         let runArgs = JSON.parse(localStorage.runAtStart);
         runArgs.forEach((cmd, index) => {
             term.writeln('Running CobraSh Start...');
-            term.write('cobrash-ras> ');
+            term.write('cobrash-rc> ');
             term.write(cmd);
             let args = new Array(cmd.split(' ')[0]);
             const argSs = cmd.split(' ');
