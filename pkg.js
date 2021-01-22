@@ -140,7 +140,7 @@ window.Packages.pkg = async function(context) {
                     let response = await fetch(codesource);
                     let code = await response.text();
 
-
+                    const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 
                     code = `
                     const { stdout, args, user } = arguments[0];
