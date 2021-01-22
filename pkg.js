@@ -144,10 +144,11 @@ window.Packages.pkg = async function(context) {
 
                     code = `
                     const { stdout, args, user } = arguments[0];
-
+                    window.showPrompt = false;
                     ${code}
+                    window.showPrompt = true;
                     `;
-                    let codefunc = new Function(code);
+                    let codefunc = new AsyncFunction(code);
                     window.Packages[args[1]] = codefunc;
                     stdout.writeln('pkg: install: ' + args[1] + ': writing changes to local packages')
                     window.showPrompt = true;

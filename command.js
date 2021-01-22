@@ -368,6 +368,7 @@ window.Commands = {
     },
     'su': (context) => {
         const { stdout, args } = context;
+        if(args.length == 0) return;
         function changeUser(newUser) {
             if(newUser == 'root' && window.usergroups[window.username] != 100 && context.user != 0)
                 return;
