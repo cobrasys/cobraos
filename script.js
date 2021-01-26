@@ -123,10 +123,10 @@ window.chdir = function(newdir) {
         // handle previous directory path traversal
         var previous = window.directory.split('/').slice(0, -1).join('/');
         window.directory = previous;
-        return;
+        return true;
     } else if(args[0] == '.') {
         // handle current directory (just returns)
-        return;
+        return true;
     }
 
     if(window.directory == '') {
@@ -134,7 +134,7 @@ window.chdir = function(newdir) {
         if(window.virtualDrive[''][args[0]]) {
             if(window.virtualDrive[''][args[0]] instanceof(VirtualFile)) {
                 stdout.writeln('cd: ' + args[0] + ': not a directory.');
-                return;
+                return false;
             }
             window.directory = '/' + args[0];
         } else {
@@ -153,12 +153,11 @@ window.chdir = function(newdir) {
         // check if directory exists
         if(eval(completestring + `['${args[0]}']`)) {
             if(eval(completestring + `['${args[0]}']`) instanceof(VirtualFile)) {
-                stdout.writeln('cd: ' + args[0] + ': not a directory.');
-                return;
+                return false;
             }
             window.directory = window.directory + '/' + args[0];
         } else {
-            stdout.writeln('cd: ' + args[0] + ': no such file or directory');
+            return false;
         }
     }
 }
