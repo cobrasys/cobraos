@@ -23,13 +23,11 @@ __wasm.setAttribute('src','bin/wasm.js');
 
 document.head.appendChild(__wasm);
 
-let localPackageList = [
-    'java',
-    'g++',
-    'python',
-    'compressionutils',
-    'mail',
-];
+var __lua = document.createElement('script');
+
+__lua.setAttribute('src','bin/lua.js');
+
+document.head.appendChild(__lua);
 
 window.Packages = {};
 /*
