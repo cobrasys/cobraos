@@ -140,22 +140,77 @@ window.Packages.pkg = async function(context) {
                 if(Object.keys(packages).includes(args[1])) {
                     let version = data.packages[args[1]].version;
                     let codesource = data.packages[args[1]].codesource;
+                    let codetype = data.packages[args[1]].codetype;
                     console.log(data);
                     stdout.writeln('pkg: install: ' + args[1] + ': fetching package source...');
                     stdout.writeln('GET: ' + codesource);
                     let response = await fetch(codesource);
                     let code = await response.text();
+                    if(codetype == 'javascript' || codetype == 'js') {
+                        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 
-                    const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+                        code = `
+                        const { stdout, args, user } = arguments[0];
+                        window.showPrompt = false;
+                        ${code}
+                        window.showPrompt = true;
+                        `;
+                        let codefunc = new AsyncFunction(code);
+                        window.Packages[args[1]] = codefunc;
+                    } else if(codetype == 'wasm') {
+                        const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 
-                    code = `
-                    const { stdout, args, user } = arguments[0];
-                    window.showPrompt = false;
-                    ${code}
-                    window.showPrompt = true;
-                    `;
-                    let codefunc = new AsyncFunction(code);
-                    window.Packages[args[1]] = codefunc;
+                        code = `
+                        const { stdout, args, user } = arguments[0];
+
+                        window.showPrompt = false;
+                        var binaryBuffer;
+
+                        let code = \`${code}\`;
+                        var module = wabt.parseWat('main.wat', code);
+                        module.resolveNames();
+                        module.validate();
+                        var binaryOutput = module.toBinary({log: true});
+                        binaryBuffer = binaryOutput.buffer;
+                        module.destroy();
+
+                        let wasm = new WebAssembly.Module(binaryBuffer);
+                        const memory = new WebAssembly.Memory({initial:1});
+
+                        function printString(offset, length) {
+                            var bytes = new Uint8Array(memory.buffer, offset, length);
+                            var string = new TextDecoder('utf8').decode(bytes);
+                            term.writeln(string);
+                        }
+
+                        const env = {
+                            env: {
+                                printf: function (offset, length) {
+                                    printString(offset, length);
+                                },
+                            },
+                            js: {
+                                mem: memory,
+                            },
+                            stdio: {
+                                outint: term.writeln,
+                                outstr: printString,
+                            }
+                        };
+
+                        const wasmInstance = new WebAssembly.Instance(wasm, env);
+                        wasmInstance.exports.main();
+                        window.showPrompt = true;
+                        `;
+                        let codefunc = new AsyncFunction(code);
+                        window.Packages[args[1]] = codefunc;
+                    } else {
+                        stdout.writeln('pkg: install: ' + args[1] + ': invalid `codetype` expected `wasm`, `js` or `javascript`');
+                        window.showPrompt = true;
+                        term.prompt();
+                        return;
+                    }
+
                     stdout.writeln('pkg: install: ' + args[1] + ': writing changes to local packages')
                     window.showPrompt = true;
                     term.prompt();
@@ -167,6 +222,6 @@ window.Packages.pkg = async function(context) {
             window.showPrompt = true;
             //term.prompt();
             
-            break;
+            return;
     }
 }
