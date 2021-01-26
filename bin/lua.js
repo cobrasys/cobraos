@@ -14,7 +14,20 @@ var Module = {
         if (0) { // XXX disabled for safety typeof dump == 'function') {
             dump(text + '\n'); // fast, straight to the real console
         } else {
-            term.writeln(text);
+            switch(text) {
+                case 'trying binaryen method: native-wasm':
+                    break;
+                
+                case 'asynchronously preparing wasm':
+                    break;
+
+                case 'binaryen method succeeded.':
+                    break;
+
+                default:
+                    term.writeln(text);
+                    break;
+            }
         }
     }
         
