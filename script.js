@@ -115,6 +115,54 @@ window.virtualDrive = {
     },
 }
 
+
+
+window.chdir = function(newdir) {
+    const args = new Array(newdir);
+    if(args[0] == '..') {
+        // handle previous directory path traversal
+        var previous = window.directory.split('/').slice(0, -1).join('/');
+        window.directory = previous;
+        return;
+    } else if(args[0] == '.') {
+        // handle current directory (just returns)
+        return;
+    }
+
+    if(window.directory == '') {
+        // handle branches off of root
+        if(window.virtualDrive[''][args[0]]) {
+            if(window.virtualDrive[''][args[0]] instanceof(VirtualFile)) {
+                stdout.writeln('cd: ' + args[0] + ': not a directory.');
+                return;
+            }
+            window.directory = '/' + args[0];
+        } else {
+            stdout.writeln('cd: ' + args[0] + ': no such file or directory');
+        }
+    } else {
+        // handle everything else
+        let workingdirectorysplit = window.directory.slice(1).split('/');
+        
+        // string for eval'ing
+        let completestring = `window.virtualDrive['']`;
+        workingdirectorysplit.forEach(element => {
+            // build eval string
+            completestring += `['${element}']`;
+        });
+        // check if directory exists
+        if(eval(completestring + `['${args[0]}']`)) {
+            if(eval(completestring + `['${args[0]}']`) instanceof(VirtualFile)) {
+                stdout.writeln('cd: ' + args[0] + ': not a directory.');
+                return;
+            }
+            window.directory = window.directory + '/' + args[0];
+        } else {
+            stdout.writeln('cd: ' + args[0] + ': no such file or directory');
+        }
+    }
+}
+
 Object.entries(window.Commands).forEach(([name, func]) => {
     window.virtualDrive['']['bin'][name] = new VirtualFile(name, func.toString());
 });
