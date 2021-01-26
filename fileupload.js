@@ -74,7 +74,7 @@ function uploadFile() {
                 return;
             }
         } else {
-            eval(completestring + `['${window.currentFilename}'] = new VirtualFile('${window.currentFilename}', '${window.currentFilecontent}')`)
+            eval(completestring + `['${window.currentFilename}'] = new VirtualFile('${window.currentFilename}', \`${window.currentFilecontent.replace('`', '\\`')}\`)`)
         }
     }
 }

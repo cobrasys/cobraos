@@ -17,6 +17,12 @@ __compress.setAttribute('src','bin/compressionutils.js');
 
 document.head.appendChild(__compress);
 
+var __wasm = document.createElement('script');
+
+__wasm.setAttribute('src','bin/wasm.js');
+
+document.head.appendChild(__wasm);
+
 let localPackageList = [
     'java',
     'g++',
