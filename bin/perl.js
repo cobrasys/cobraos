@@ -37,7 +37,6 @@ const perlRun = async (context) => {
             return;
         }
     }
-    
     function run_perl_code() {
 
         var was_error = 0;
@@ -63,7 +62,7 @@ const perlRun = async (context) => {
 
     }
     run_perl_code();
-
+    //term.write('\r\n');
     window.showPrompt = true;
 }
 

@@ -152,7 +152,7 @@ Perl.output = function (str,chan) { // can be overridden by the user
 	Perl[buf] += str;
 	var pos = Perl[buf].indexOf("\n");
 	while (pos>-1) {
-		console.log( chan==2?"STDERR":"STDOUT", Perl[buf].slice(0,pos) );
+		term.write( Perl[buf].slice(0,pos) );
 		Perl[buf] = Perl[buf].slice(pos+1);
 		pos = Perl[buf].indexOf("\n");
 	}
@@ -163,7 +163,12 @@ Perl.outputLine = function (chan,text) { // internal function
 	Perl.output("\n",chan);
 };
 Perl.outputChar = function (chan,c) { // internal function
-	Perl.output(String.fromCharCode(c),chan);
+	console.log(c);
+	if(c == 10) {
+		term.write('\r\n');
+		return;
+	}
+	term.write(String.fromCharCode(c));
 };
 
 Perl.makeOutputTextarea = function (id) {
