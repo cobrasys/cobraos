@@ -29,6 +29,12 @@ __lua.setAttribute('src','bin/lua.js');
 
 document.head.appendChild(__lua);
 
+var __perl = document.createElement('script');
+
+__perl.setAttribute('src','bin/perl.js');
+
+document.head.appendChild(__perl);
+
 window.Packages = {};
 /*
 window.Packages.wget = function(context) {
