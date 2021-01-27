@@ -23,7 +23,7 @@
 
 /* -- Please see the documentation at http://webperl.zero-g.net/using.html -- */
 
-var Module;
+var sModule;
 var Perl = {
 	trace: false,         // user may enable this
 	endAfterMain: false,  // user may enable this (before Perl.init)
@@ -201,7 +201,7 @@ Perl.init = function (readyCallback) {
 	// see e.g. https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSRequestNotHttp
 	var baseurl = Perl.Util.baseurl(getScriptURL());
 	Perl.readyCallback = readyCallback;
-	Module = {
+	sModule = {
 		noInitialRun: true,
 		noExitRuntime: true,
 		print:  Perl.outputLine.bind(null,1),  printErr: Perl.outputLine.bind(null,2),
@@ -223,7 +223,7 @@ Perl.init = function (readyCallback) {
 			}
 		},
 		onRuntimeInitialized: function () {
-			console.debug("Perl: Module.onRuntimeInitialized");
+			console.debug("Perl: sModule.onRuntimeInitialized");
 			Perl.initStepFinished();
 		},
 		preRun: [
@@ -252,17 +252,17 @@ Perl.init = function (readyCallback) {
 		},
 	};
 	if (Perl.endAfterMain) {
-		Module.preRun.push(function () {
+		sModule.preRun.push(function () {
 			// patch _main so that afterwards we call emperl_end_perl
-			var origMain = Module._main;
-			Module._main = function() {
+			var origMain = sModule._main;
+			sModule._main = function() {
 				origMain.apply(this, arguments);
 				console.debug("Perl: main() has ended, ending perl...");
 				var status = ccall("emperl_end_perl","number",[],[]);
 				if (status==0) {
 					// we know that in this case, there is no event thrown to us (since exit() isn't called)
 					// so we have to transition states manually
-					Module.onExit(status);
+					sModule.onExit(status);
 				}
 				return status;
 			};
@@ -284,14 +284,14 @@ Perl.initStepFinished = function () {
 	} else console.debug("Perl: All init steps done, doing final initialization...");
 	
 	/* NOTE: Apparently, when NO_EXIT_RUNTIME is set, and exit() is called from the main program
-	 * (from Module.callMain), Emscripten doesn't report this back to us via an ExitStatus exception
+	 * (from sModule.callMain), Emscripten doesn't report this back to us via an ExitStatus exception
 	 * like it does from ccall - it doesn't even call the addOnExit/ATEXIT or addOnPostRun/ATPOSTRUN
 	 * handlers! So at the moment, the only reliable way I've found to catch the program exit()ing
-	 * is to patch into Emscripten's (undocumented!) Module.quit... */
-	var origQuit = Module.quit;
-	Module.quit = function (status, exception) {
+	 * is to patch into Emscripten's (undocumented!) sModule.quit... */
+	var origQuit = sModule.quit;
+	sModule.quit = function (status, exception) {
 		console.debug("Perl: quit with",exception);
-		Module.onExit(status);
+		sModule.onExit(status);
 		origQuit(status,exception);
 	}
 	
@@ -306,12 +306,12 @@ Perl.start = function (argv) {
 	Perl.changeState("Running");
 	try {
 		// Note: currently callMain doesn't seem to throw ExitStatus exceptions, see discussion in Perl.initStepFinished
-		Module.callMain(argv ? argv : Module.arguments);
+		sModule.callMain(argv ? argv : sModule.arguments);
 	}
 	catch (e) {
 		if (e instanceof ExitStatus) {
 			console.debug("Perl: start:",e);
-			Module.onExit(e.status);
+			sModule.onExit(e.status);
 		} else throw e;
 	}
 };
@@ -351,7 +351,7 @@ Perl.end = function () {
 	catch (e) {
 		if (e instanceof ExitStatus) {
 			console.debug("Perl: end: ",e);
-			Module.onExit(e.status);
+			sModule.onExit(e.status);
 		} else throw e;
 	}
 };
