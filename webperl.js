@@ -163,7 +163,6 @@ Perl.outputLine = function (chan,text) { // internal function
 	Perl.output("\n",chan);
 };
 Perl.outputChar = function (chan,c) { // internal function
-	console.log(c);
 	if(c == 10) {
 		term.write('\r\n');
 		return;
